@@ -1,0 +1,53 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Build to TestFlight"
+  lane :beta do
+    cert
+    sigh
+   
+
+    automatic_code_signing(
+    use_automatic_signing: true,
+    team_id: "MD5XZA5TDC"
+    )
+     
+    update_app_identifier(
+       plist_path: "Runner/Info.plist",
+       xcodeproj: "Runner.xcodeproj",
+       app_identifier: "kz.m-lombard.online"
+    )
+
+
+    build_app(
+       workspace: "Runner.xcworkspace",
+       scheme: "Runner",
+       export_method: "app-store",
+     
+     ) 
+    
+  # pilot( api_key_path: "fastlane/api_key_path.json")
+
+
+    upload_to_testflight(
+     skip_submission: true,
+       skip_waiting_for_build_processing: true
+       )
+  
+  end
+end
