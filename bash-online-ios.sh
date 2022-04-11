@@ -23,9 +23,9 @@ pod update
 echo "4. Copy config Fastlane"
 mkdir fastlane
 cd ./fastlane
-cp ~/Documents/project-test/fastlane/Appfile-m-online Appfile
-cp ~/Documents/project-test/fastlane/Fastfile-m-online Fastfile
-#cp ~/Documents/project-test/fastlane/api_key_path.json api_key_path.json
+cp ~/Documents/project/fastlane/Appfile-m-online Appfile
+cp ~/Documents/project/fastlane/Fastfile-m-online Fastfile
+#cp ~/Documents/project/fastlane/api_key_path.json api_key_path.json
 cd ..
 
 
@@ -36,12 +36,22 @@ buildNum=$(tail -c4 result1)
 let "buildNum += 2"
 
 
-echo "6. Change Info.plist for iOS"
+echo "6. Get date"
+DateToday=$(date "+%d.%m.%Y")
+
+
+echo "7. Change constants"
+cd ..
+sed -i".bak" -e 's!3.0.113!3.0.'$buildNum'!; s/13.08.2021/'$DateToday'/' ./lib/utils/constants.dart
+
+
+echo "8. Change Info.plist for iOS"
+cd ./ios
 sed -i".bak" -e 's!$(FLUTTER_BUILD_NUMBER)!'$buildNum'!; s!$(FLUTTER_BUILD_NAME)!3.0.'$buildNum'!' ./Runner/Info.plist
 #rm .Runner/Info.plist.bak
 
 
-echo "8. Run FastLane"
+echo "9. Run FastLane"
 fastlane ios beta
 
  

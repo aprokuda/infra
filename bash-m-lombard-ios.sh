@@ -35,16 +35,20 @@ buildNum=$(tail -c4 result1)
 let "buildNum += 2"
 
 
-echo "6. Change Info.plist for iOS"
+echo "6. Get date"
+DateToday=$(date "+%d.%m.%Y")
+
+
+echo "7. Change Info.plist for iOS"
 sed -i".bak" -e 's!$(FLUTTER_BUILD_NUMBER)!'$buildNum'!; s!$(FLUTTER_BUILD_NAME)!3.0.'$buildNum'!; s!М-Онлайн!М-Ломбард!' ./Runner/Info.plist
 #rm Info.plist.bak 
 
-echo "7. Change constants"
+echo "8. Change constants"
 cd ..
-sed -i".bak" 's!https://test-backend-01.m-lombard.kz:8000!https://backend-01.m-lombard.kz:9000!' ./lib/utils/constants.dart 
+sed -i".bak" -e 's!https://test-backend-01.m-lombard.kz:8000!https://backend-01.m-lombard.kz:9000!; s!13.08.2021!'$DateToday'!; s!3.0.113!3.0.'$buildNum'!' ./lib/utils/constants.dart 
 
 
-echo "8. Run FastLane"
+echo "9. Run FastLane"
 cd ./ios
 fastlane ios beta
 
