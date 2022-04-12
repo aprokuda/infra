@@ -1,7 +1,10 @@
 #!/bin/bash
+
+#buildNum=284
+
 echo "1. Make folder"
-mkdir M-Online-android
-cd ./M-Online-android
+mkdir ./M-Online
+cd ./M-Online
 
 
 echo "2. Git Clone"
@@ -17,24 +20,25 @@ cp ~/Documents/project/fastlane/Fastfile-m-online Fastfile
 #cp ~/Documents/project/fastlane/api_key_path.json api_key_path.json
 cd ..
 
-echo "4. Get version number"
-fastlane run latest_testflight_build_number >> result
-grep build: result >> result1
-buildNum=$(tail -c4 result1)
+
+echo "4. Get date"
+DateToday=$(date "+%d.%m.%Y")
+
+
+echo "5. Get version number"
+fastlane run latest_testflight_build_number >> result_from_testflight
+grep build: result_from_testflight >> result_build
+buildNum=$(tail -c4 result_build)
 let "buildNum += 2"
 cd ..
 
-echo "5. Get date"
-DateToday=$(date "+%d.%m.%Y")
-
 echo "6. Copy key.properties"
-cp ~/Documents/project/key-android/key.properties ./android/key.properties
-
+cp ~/Documents/project/key-android/key-m-lom.properties ./android/key.properties
 
 echo "7. Corrected build.gradle"
 cd ./android/app
 gsed -i '/android {/i def keystoreProperties = new Properties()' build.gradle
-gsed -i '/android {/i def keystorePropertiesFile = rootProject.file("key.properties")' build.gradle 
+gsed -i '/android {/i def keystorePropertiesFile = rootProject.file("key.properties")' build.gradle
 gsed -i '/android {/i if (keystorePropertiesFile.exists()) {' build.gradle
 gsed -i '/android {/i keystoreProperties.load(new FileInputStream(keystorePropertiesFile))' build.gradle
 gsed -i 's/keystoreProperties.load(new FileInputStream(keystorePropertiesFile))/     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))/' build.gradle
@@ -58,18 +62,23 @@ gsed -i 's/signingConfig signingConfigs.debug/signingConfig signingConfigs.relea
 cd ../..
 
 
-echo "7. Change constants"
+echo "8. Corrected constants"
 gsed -i -e 's!3.0.113!3.0.'$buildNum'!; s/13.08.2021/'$DateToday'/' ./lib/utils/constants.dart
 
 
-echo "8. Install and update pub" 
-flutter pub upgrade
+echo "9. Change Info.plist for iOS"
+gsed -i -e 's!$(FLUTTER_BUILD_NUMBER)!'$buildNum'!; s!$(FLUTTER_BUILD_NAME)!3.0.'$buildNum'!' ./ios/Runner/Info.plist
 
-echo "9. Build appbundle"
+
+echo "11. Build appbundle"
+flutter pub upgrade
+flutter pub get
 flutter build appbundle
 
 
-#echo "10. Run FastLane"
+#echo "12. Run FastLane"
+#cd ./ios
+#pod install
+#pod update
 #fastlane ios beta
 
- 
