@@ -1,0 +1,2 @@
+json_key_file("~/Documents/project/key-android/pc-api-4812210581707989654-248-7e9695f47600.json") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
+package_name("kz.mlombard") # e.g. com.krausefx.app
