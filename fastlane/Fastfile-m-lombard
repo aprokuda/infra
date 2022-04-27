@@ -20,9 +20,9 @@ platform :ios do
   lane :beta do
     cert
     sigh
-   
+    cocoapods   
 
-    automatic_code_signing(
+    update_code_signing_settings(
     use_automatic_signing: true,
     team_id: "MD5XZA5TDC"
     )

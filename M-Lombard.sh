@@ -1,12 +1,29 @@
 #!/bin/bash
 
+echo "1. Get date"
+DateToday=$(date "+%d.%m.%Y")
 
-echo "1. Make folder"
-mkdir ./M-Lombard
+#buildNum=327
+#cd ./deploy-version
+
+echo "2. Get version number"
+cd ./deploy-version/Get-folder-M-Lombard/ios
+rm -r result_from_testflight
+rm -r result_build
+fastlane run latest_testflight_build_number >> result_from_testflight
+grep build: result_from_testflight >> result_build
+buildNum=$(tail -c4 result_build)
+let "buildNum += 2"
+cd ../..
+
+
+echo "3. Make folder"
 cd ./M-Lombard
+mkdir 3.0.$buildNum
+cd ./3.0.$buildNum
 
 
-echo "2. Git Clone"
+echo "4. Git Clone"
 git clone git@github.com:m-lombard/front-flutter.git
 cd ./front-flutter
 
@@ -30,18 +47,8 @@ cp ~/Documents/project/fastlane/Appfile-m-lombard-android ./fastlane/Appfile
 cp ~/Documents/project/fastlane/Fastfile-m-lombard-android ./fastlane/Fastfile
 cd ..
 
-echo "6. Get date"
-DateToday=$(date "+%d.%m.%Y")
 
-echo "7. Get version number"
-cd ./ios
-fastlane run latest_testflight_build_number >> result_from_testflight
-grep build: result_from_testflight >> result_build
-buildNum=$(tail -c4 result_build)
-let "buildNum += 2"
-cd ..
-
-echo "8. Corrected build.gradle for Android"
+echo "6. Corrected build.gradle for Android"
 cd ./android/app
 gsed -i '/android {/i def keystoreProperties = new Properties()' build.gradle
 gsed -i '/android {/i def keystorePropertiesFile = rootProject.file("key.properties")' build.gradle
@@ -68,33 +75,36 @@ gsed -i '/buildTypes {/i }' build.gradle
 gsed -i 's/signingConfig signingConfigs.debug/signingConfig signingConfigs.release/' build.gradle
 cd ../..
 
-echo "9. Corrected constants"
+echo "7. Corrected constants"
 gsed -i -e 's!https://test-backend-01.m-lombard.kz:8000!https://backend-01.m-lombard.kz:9000!; s!13.08.2021!'$DateToday'!; s!3.0.113!3.0.'$buildNum'!' ./lib/utils/constants.dart
 
 
-echo "10. Corrected AndroidManifest"
+echo "8. Corrected AndroidManifest"
 gsed -i 's/android:label="М-Онлайн">/android:label="М-Ломбард">/' ./android/app/src/main/AndroidManifest.xml
 
 
-echo "11. Corrected Info.plist for iOS"
+echo "9. Corrected Info.plist for iOS"
 gsed -i -e 's!$(FLUTTER_BUILD_NUMBER)!'$buildNum'!; s!$(FLUTTER_BUILD_NAME)!3.0.'$buildNum'!; s!М-Онлайн!М-Ломбард!' ./ios/Runner/Info.plist
 
 
-echo "12. Build appbundle"
+echo "10. Pub upgrade"
 flutter pub upgrade
 flutter pub get
+
+
+echo "11. Run FastLane iOS"
+cd ./ios
+fastlane ios beta
+cd ..
+
+
+echo "12. Build appbundle"
 flutter build appbundle
 
 
 echo "13. Run FastLane Android"
 cd ./android
 fastlane android internal
-cd ..
 
-echo "14. Run FastLane iOS"
-cd ./ios
-pod install
-pod update
-fastlane ios beta
 
 
