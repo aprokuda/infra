@@ -9,5 +9,5 @@ fastlane run latest_testflight_build_number >> result_from_testflight
 grep build: result_from_testflight >> result_build
 buildNum=$(tail -c4 result_build)
 let "buildNum += 2"
-
+123123
 
