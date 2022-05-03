@@ -18,6 +18,13 @@ default_platform(:ios)
 platform :ios do
   desc "Build to TestFlight"
   lane :beta do
+
+    app_store_connect_api_key(
+      key_id: "HMZZ5Q374W",
+      issuer_id: "9f6b279b-7278-47f1-94e7-c9eb226c8e34",
+      key_filepath: "./AuthKey_HMZZ5Q374W.p8"
+      )
+
     cert
     sigh
     cocoapods   

@@ -30,6 +30,7 @@ cd ./front-flutter
 
 echo "3. Copy key.properties"
 cp ~/Documents/project/key-android/key-m-lom.properties ./android/key.properties
+cp ~/Documents/project/key-ios/AuthKey_HMZZ5Q374W.p8 ./ios/AuthKey_HMZZ5Q374W.p8
 
 
 echo "4. Copy config Fastlane iOS"
@@ -85,7 +86,8 @@ gsed -i 's/android:label="М-Онлайн">/android:label="М-Ломбард">/'
 
 echo "9. Corrected Info.plist for iOS"
 gsed -i -e 's!$(FLUTTER_BUILD_NUMBER)!'$buildNum'!; s!$(FLUTTER_BUILD_NAME)!3.0.'$buildNum'!; s!М-Онлайн!М-Ломбард!' ./ios/Runner/Info.plist
-
+gsed -i '/UIViewControllerBasedStatusBarAppearance/i <key>ITSAppUsesNonExemptEncryption</key>' ./ios/Runner/Info.plist
+gsed -i '/UIViewControllerBasedStatusBarAppearance/i <false/>' ./ios/Runner/Info.plist
 
 echo "10. Pub upgrade"
 flutter pub upgrade

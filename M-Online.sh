@@ -46,7 +46,7 @@ cd ..
 
 echo "6. Copy key.properties"
 cp ~/Documents/project/key-android/key.properties ./android/key.properties
-
+cp ~/Documents/project/key-ios/AuthKey_HMZZ5Q374W.p8 ./ios/AuthKey_HMZZ5Q374W.p8
 
 echo "7. Corrected build.gradle for Android"
 cd ./android/app
@@ -81,6 +81,8 @@ gsed -i -e 's!3.0.113!3.0.'$buildNum'!; s/13.08.2021/'$DateToday'/' ./lib/utils/
 
 echo "9. Corrected Info.plist for iOS"
 gsed -i -e 's!$(FLUTTER_BUILD_NUMBER)!'$buildNum'!; s!$(FLUTTER_BUILD_NAME)!3.0.'$buildNum'!' ./ios/Runner/Info.plist
+gsed -i '/UIViewControllerBasedStatusBarAppearance/i <key>ITSAppUsesNonExemptEncryption</key>' ./ios/Runner/Info.plist
+gsed -i '/UIViewControllerBasedStatusBarAppearance/i <false/>' ./ios/Runner/Info.plist
 
 
 echo "10. Upgrade pub"
