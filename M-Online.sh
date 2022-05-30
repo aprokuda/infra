@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#
 
 echo "1. Get date"
 DateToday=$(date "+%d.%m.%Y")
@@ -105,6 +106,4 @@ echo "15. Run FastLane for Android"
 cd ./android
 fastlane android internal
 
-
-#
 
