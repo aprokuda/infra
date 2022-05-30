@@ -104,12 +104,7 @@ flutter build appbundle
 echo "15. Run FastLane for Android"
 cd ./android
 fastlane android internal
-<<<<<<< HEAD
 
 
 #
-=======
-1234
-
->>>>>>> 48a9bec83337a2769c866344725f98ecaa247e40
 
