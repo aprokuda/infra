@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#
+##
 
 echo "1. Get date"
 DateToday=$(date "+%d.%m.%Y")
