@@ -23,6 +23,7 @@ cd ./3.0.$buildNum
 
 
 echo "4. Git Clone"
+#git clone --branch=feature/old_project_force_to_update git@github.com:m-lombard/front-flutter.git
 git clone git@github.com:m-lombard/front-flutter.git
 cd ./front-flutter
 
@@ -105,5 +106,5 @@ cd ./android
 fastlane android internal
 
 
-
+#
 
