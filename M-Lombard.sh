@@ -10,7 +10,7 @@ echo "2. Get version number"
 cd ./deploy-version/Get-folder-M-Online/ios
 rm -r result_from_testflight
 rm -r result_build
-fastlane run latest_testflight_build_number >> result_from_testflight
+fastlane ios lane_get_build_number >> result_from_testflight
 grep build: result_from_testflight >> result_build
 buildNum=$(tail -c4 result_build)
 let "buildNum += 1"
@@ -24,6 +24,7 @@ cd ./3.0.$buildNum
 
 
 echo "4. Git Clone"
+#git clone --branch=feature/old_project_force_to_update git@github.com:m-lombard/front-flutter.git
 git clone git@github.com:m-lombard/front-flutter.git
 cd ./front-flutter
 

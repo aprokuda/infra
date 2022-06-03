@@ -1,6 +1,5 @@
 #!/bin/bash
 
-##
 
 echo "1. Get date"
 DateToday=$(date "+%d.%m.%Y")
@@ -10,12 +9,14 @@ echo "2. Get version number"
 cd ./deploy-version/Get-folder-M-Online/ios
 rm -r result_from_testflight
 rm -r result_build
-fastlane run latest_testflight_build_number >> result_from_testflight
+fastlane ios lane_get_build_number >> result_from_testflight
 grep build: result_from_testflight >> result_build
 buildNum=$(tail -c4 result_build)
 let "buildNum += 2"
 cd ../..
 
+#buildNum=376
+#cd ./deploy-version 
 
 echo "3. Make folder"
 cd ./M-Online
