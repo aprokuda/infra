@@ -20,6 +20,7 @@ cd ../..
 
 echo "3. Make folder"
 cd ./M-Online
+sudo rm -r 3.0.$buildNum
 mkdir 3.0.$buildNum
 cd ./3.0.$buildNum
 
